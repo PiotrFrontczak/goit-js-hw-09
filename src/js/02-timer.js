@@ -1,10 +1,18 @@
-import Notiflix from 'notiflix';
+document.addEventListener('DOMContentLoaded', function() {
+  const datetimePicker = flatpickr('#datetime-picker', {
+    enableTime: true,
+    time_24hr: true,
+    defaultDate: new Date(),
+    minuteIncrement: 1,
+    onClose: handleDateSelection
+  });
 
-function addLeadingZero(value) {
+  let timerInterval;
+
+  function addLeadingZero(value) {
     return value < 10 ? '0' + value : value;
   }
 
-  // Funkcja konwertująca milisekundy na obiekt z wartościami dni, godzin, minut i sekund
   function convertMs(ms) {
     const second = 1000;
     const minute = second * 60;
@@ -19,9 +27,8 @@ function addLeadingZero(value) {
     return { days, hours, minutes, seconds };
   }
 
-  // Funkcja aktualizująca licznik czasu na interfejsie
   function updateTimer(endTime) {
-    const now = new Date().getTime();
+    const now = Date.now();
     const timeLeft = endTime - now;
 
     if (timeLeft <= 0) {
@@ -32,38 +39,29 @@ function addLeadingZero(value) {
 
     const { days, hours, minutes, seconds } = convertMs(timeLeft);
 
-    document.querySelector('[data-days]').textContent = addLeadingZero(days);
-    document.querySelector('[data-hours]').textContent = addLeadingZero(hours);
-    document.querySelector('[data-minutes]').textContent = addLeadingZero(minutes);
-    document.querySelector('[data-seconds]').textContent = addLeadingZero(seconds);
+    document.querySelectorAll('.value').forEach(function(element) {
+      const type = element.getAttribute('data-type');
+      element.textContent = addLeadingZero(eval(type));
+    });
   }
 
-  // Funkcja obsługująca zamknięcie wyboru daty
   function handleDateSelection(selectedDates) {
     const selectedDate = selectedDates[0];
 
     if (selectedDate.getTime() < Date.now()) {
-      alert('Please choose a date in the future');
+      Notiflix.Notify.Failure('Please choose a date in the future');
       document.getElementById('start-button').disabled = true;
     } else {
+      Notiflix.Notify.Success('Date selected successfully!');
       document.getElementById('start-button').disabled = false;
     }
   }
 
-  // Inicjalizacja flatpickr
-  const options = {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onClose: handleDateSelection
-  };
-
-  const datetimePicker = flatpickr('#datetime-picker', options);
-
-  // Obsługa kliknięcia przycisku Start
-  document.getElementById('start-button').addEventListener('click', () => {
+  document.getElementById('start-button').addEventListener('click', function() {
     const selectedDate = datetimePicker.selectedDates[0].getTime();
-    const timerInterval = setInterval(() => updateTimer(selectedDate), 1000);
-    updateTimer(selectedDate); // Natychmiastowa aktualizacja
+    timerInterval = setInterval(function() {
+      updateTimer(selectedDate);
+    }, 1000);
+    updateTimer(selectedDate);
   });
+});
