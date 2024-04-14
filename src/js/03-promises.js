@@ -1,27 +1,15 @@
-// function createPromise(position, delay) {
-//   const shouldResolve = Math.random() > 0.3;
-//   if (shouldResolve) {
-//     resolve({ position, delay });
-//   } else {
-//     reject({ position, delay });
-//   }
-// }
-
 import Notiflix from 'notiflix'
 
-  // Złap formularz
   const form = document.querySelector('.form');
-
-  // Nasłuchuj zdarzenie submit formularza
+  
   form.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Zapobiega domyślnej akcji przesyłania formularza
+    event.preventDefault(); 
 
-    // Pobierz wartości z pól formularza
+
     const delay = parseInt(form.elements.delay.value);
     const step = parseInt(form.elements.step.value);
     const amount = parseInt(form.elements.amount.value);
 
-    // Stwórz obietnice na podstawie danych z formularza
     for (let i = 0; i < amount; i++) {
       try {
         const result = await createPromise(i + 1, delay + i * step);
@@ -32,7 +20,6 @@ import Notiflix from 'notiflix'
     }
   });
 
-  // Funkcja createPromise z wykorzystaniem Notiflix
   async function createPromise(position, delay) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
