@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
       Notiflix.Notify.Failure('Please choose a date in the future');
       document.getElementById('start-button').disabled = true;
     } else {
-      Notiflix.Notify.Success('Date selected successfully!');
+      Notiflix.Notify.success('Date selected successfully!');
       document.getElementById('start-button').disabled = false;
     }
   }
