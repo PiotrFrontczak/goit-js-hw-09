@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+import Notiflix from 'notiflix';
+
+document.addEventListener('DOMContentLoaded', function () {
   const datetimePicker = flatpickr('#datetime-picker', {
     enableTime: true,
     time_24hr: true,
